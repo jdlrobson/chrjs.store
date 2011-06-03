@@ -46,4 +46,9 @@ test("each", function() {
 	strictEqual(tiddlers.length, 2, "only 2 tiddlers are tagged foo");
 });
 
+test("getTiddlers", function() {
+	var tiddlers = testStore();
+	strictEqual(tiddlers.length, 4, "4 tiddlers should be in testStore");
+});
+
 })(QUnit.module, jQuery);

@@ -39,7 +39,11 @@ $.extend(tiddlyweb.Resource.prototype, {
 		}
 	},
 	'delete': function(callback, errback, filters) {
-		callback.apply(this, [this]);
+		if(this.title == "foo" && this.bag.name == "foo_public") {
+			errback.apply(this, [this]);
+		} else {
+			callback.apply(this, [this]);
+		}
 	}
 });
 

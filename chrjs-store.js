@@ -603,7 +603,9 @@ tiddlyweb.Store = function(tiddlerCallback, getCached) {
 				}
 				if (synced) {
 					bagName = tiddler.bag.name;
-					delete store[bagName].tiddlers[tiddler.title];
+					if(store[bagName]) {
+						delete store[bagName].tiddlers[tiddler.title];
+					}
 				}
 				if (callback) {
 					callback(tiddler);

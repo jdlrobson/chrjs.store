@@ -73,3 +73,31 @@ test('Retrieve tiddler (from server)', function() {
 		strictEqual(tiddler.text, 'Hello World', 'check the text was found as it was on the "server"');
 	});
 });
+
+test('Delete tiddler local', function() {
+	var tid = new tiddlyweb.Tiddler("HelloThere");
+	tid.bag = new tiddlyweb.Bag('foo_public', '/');
+	ts.remove({ tiddler: tid, pending: true }, function(tid) {
+		strictEqual(localStorage.getItem('foo_public/HelloThere'), null,
+			'there should nothing in local storage after I have explicitly asked to delete anything pending');
+	});
+});
+
+test('Delete tiddler server', function() {
+	var tid = new tiddlyweb.Tiddler("HelloThere");
+	tid.bag = new tiddlyweb.Bag('foo_public', '/');
+	ts.remove({ tiddler: tid, delete: true }, function(tiddler) {
+		strictEqual(tiddler.title, 'HelloThere', 'The tiddler HelloThere was deleted from server');
+	});
+});
+
+test('Delete tiddler that is local but not on server', function() {
+	var tid = new tiddlyweb.Tiddler('foo');
+	tid.bag = new tiddlyweb.Bag('foo_public', '/');
+	ts.remove({ tiddler: tid, delete: true }, function(tiddler) {
+		strictEqual(tiddler, null, "The tiddler foo only exists in local storage");
+		strictEqual(localStorage.getItem('foo_public/foo'), null,
+			'make sure the tiddler was removed from local storage');
+		// TODO: I should also be able to detect in the callback that the deletion on the server failed but didn't locally.
+	});
+});
